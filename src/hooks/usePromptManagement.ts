@@ -25,6 +25,9 @@ export interface UsePromptManagementReturn {
   handleDeletePrompt: (id: string) => Promise<void>;
   handlePastePrompt: (text: string) => Promise<void>;
   categories: Array<{ id: string; name: string; count: number }>;
+  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleImportPrompts: () => Promise<void>;
+  selectedFile: File | null;
 }
 
 export const usePromptManagement = (): UsePromptManagementReturn => {
@@ -35,6 +38,7 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
   const [modalMode, setModalMode] = useState<'add' | 'edit' | null>(null);
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
   const [notification, setNotification] = useState<{ message: string | null; type: NotificationType | null }>({ message: null, type: null });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const loadPrompts = useCallback(async () => {
     try {
@@ -73,6 +77,7 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     setModalOpen(false);
     setEditingPrompt(null);
     setModalMode(null);
+    setSelectedFile(null);
   };
 
   const handleSave = async (data: PromptInput) => {
@@ -108,6 +113,56 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     await _handleDeleteInternal(id); 
   };
   
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedFile(event.target.files[0]);
+    } else {
+      setSelectedFile(null);
+    }
+  };
+
+  const handleImportPrompts = async () => {
+    if (!selectedFile) {
+      setNotification({ message: 'ファイルが選択されていません', type: NotificationType.ERROR });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const fileContent = e.target?.result as string;
+      if (!fileContent) {
+        setNotification({ message: 'ファイルの内容を読み取れませんでした', type: NotificationType.ERROR });
+        return;
+      }
+
+      const fileName = selectedFile.name.replace(/\.[^/.]+$/, "");
+
+      if (fileContent.trim() === '') {
+          setNotification({ message: 'ファイルが空です', type: NotificationType.ERROR });
+          return;
+      }
+      
+      try {
+        await promptService.savePrompt({ 
+          title: fileName, 
+          prompt: fileContent,
+          isFavorite: false 
+        });
+
+        setNotification({ message: `プロンプト「${fileName}」をインポートしました`, type: NotificationType.SUCCESS });
+        await loadPrompts();
+        handleCloseModal();
+      } catch (error) {
+        console.error("プロンプトのインポートに失敗しました", error);
+        setNotification({ message: 'プロンプトのインポートに失敗しました', type: NotificationType.ERROR });
+      }
+    };
+    reader.onerror = () => {
+      setNotification({ message: 'ファイルの読み取りに失敗しました', type: NotificationType.ERROR });
+    };
+    reader.readAsText(selectedFile);
+  };
+
   const handlePastePrompt = useCallback(async (text: string) => {
     try {
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -176,5 +231,8 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     handleDeletePrompt,
     handlePastePrompt,
     categories,
+    handleFileChange,
+    handleImportPrompts,
+    selectedFile,
   };
 }; 

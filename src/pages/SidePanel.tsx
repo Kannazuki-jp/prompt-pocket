@@ -33,6 +33,9 @@ const SidePanel: React.FC = () => {
     handleSave,
     handleDeletePrompt,
     handlePastePrompt,
+    handleFileChange,
+    handleImportPrompts,
+    selectedFile,
   } = usePromptManagement();
 
   return (
@@ -78,12 +81,17 @@ const SidePanel: React.FC = () => {
       </main>
 
       {/* モーダル */}
-      <PromptModal
-        isOpen={modalOpen}
-        onClose={handleCloseModal}
-        onSave={handleSave}
-        editingPrompt={modalMode === 'edit' ? editingPrompt : undefined}
-      />
+      {modalOpen && (
+        <PromptModal
+          isOpen={modalOpen}
+          onClose={handleCloseModal}
+          onSave={handleSave}
+          editingPrompt={editingPrompt}
+          onFileChange={handleFileChange}
+          onImportPrompts={handleImportPrompts}
+          selectedFile={selectedFile}
+        />
+      )}
     </div>
   );
 };

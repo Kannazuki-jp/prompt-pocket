@@ -1,16 +1,28 @@
 // プロンプト追加・編集用のモーダルコンポーネント（UIと状態管理のみ、ストレージ操作は親から渡される）
 // なぜpropsで制御するか: 再利用性・状態管理の一元化のため
 import React, { useState, useEffect } from 'react';
-import { Prompt } from '../types';
+import { Prompt,PromptInput} from '../types';
 
 export interface PromptModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { title: string; prompt: string }) => void;
-  editingPrompt?: Prompt | null;
+  onSave: (data: PromptInput) => void;
+  editingPrompt: Prompt | null;
+  // usePromptManagementからファイル関連のハンドラを受け取る
+  onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onImportPrompts: () => Promise<void>;
+  selectedFile: File | null;
 }
 
-export const PromptModal: React.FC<PromptModalProps> = ({ isOpen, onClose, onSave, editingPrompt }) => {
+export const PromptModal: React.FC<PromptModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  editingPrompt, 
+  onFileChange,
+  onImportPrompts,
+  selectedFile
+}) => {
   // フォームのローカル状態
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
@@ -35,6 +47,15 @@ export const PromptModal: React.FC<PromptModalProps> = ({ isOpen, onClose, onSav
       return;
     }
     onSave({ title: title.trim(), prompt: prompt.trim() });
+  };
+
+  // 保存ボタンのクリック時、ファイル選択有無で分岐
+  const handleSaveClick = () => {
+    if (!editingPrompt && selectedFile) {
+      onImportPrompts();
+    } else {
+      handleSave();
+    }
   };
 
   // モーダルが閉じられた際の初期化
@@ -68,14 +89,37 @@ export const PromptModal: React.FC<PromptModalProps> = ({ isOpen, onClose, onSav
           onChange={e => setPrompt(e.target.value)}
         />
         {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+
+        {/* ファイルインポート */}
+        {!editingPrompt && ( // 新規追加時のみ表示
+          <div className="mb-4">
+            <label htmlFor="prompt-file-input" className="block text-sm font-medium text-gray-700 mb-1">
+              ファイルからインポート
+            </label>
+            <input
+              id="prompt-file-input"
+              type="file"
+              accept=".txt,.md,.yaml,.yml"
+              className="block w-full text-sm text-slate-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100
+              "
+              onChange={onFileChange}
+            />
+          </div>
+        )}
+
         <div className="flex justify-end space-x-2">
           <button
             className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
             onClick={handleClose}
           >キャンセル</button>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            onClick={handleSave}
+            className={editingPrompt ? "bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded" : "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"}
+            onClick={handleSaveClick}
           >保存</button>
         </div>
       </div>
