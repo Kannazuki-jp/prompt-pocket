@@ -8,10 +8,11 @@ export interface PromptItemProps {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onPaste: (text: string) => void;
+  categoryName?: string; // 追加: カテゴリ名（省略可）
 }
 
 // PromptItemは1つのプロンプトをカード形式で表示し、アクションボタンを提供する
-const PromptItem: React.FC<PromptItemProps> = ({ prompt, onEdit, onDelete, onPaste }) => {
+const PromptItem: React.FC<PromptItemProps> = ({ prompt, onEdit, onDelete, onPaste, categoryName }) => {
   // Chrome拡張機能のサイドパネルに最適化された超コンパクトなデザイン
   return (
     <div 
@@ -25,6 +26,13 @@ const PromptItem: React.FC<PromptItemProps> = ({ prompt, onEdit, onDelete, onPas
           <h3 className="text-base font-semibold text-slate-800 truncate" title={prompt.title}>
             {prompt.title}
           </h3>
+
+          {/* カテゴリバッジ（カテゴリがある場合のみ表示） */}
+          {categoryName && (
+            <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium rounded px-2 py-0.5 mt-1 mb-1 mr-2">
+              {categoryName}
+            </span>
+          )}
           
           {/* 本文プレビュー - サイズアップして余白追加 */}
           <p className="text-sm text-slate-600 mt-1 truncate" title={prompt.prompt}>

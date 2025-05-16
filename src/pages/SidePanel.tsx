@@ -1,10 +1,11 @@
 // プロンプト管理サイドパネルのメインコンポーネント
 // なぜ状態をここで一元管理するか: UIとデータの同期・一貫性のため
-import React from 'react';
+import React, { useState } from 'react';
 import { PromptModal } from '../components/PromptModal';
 import PromptList from '../components/PromptList';
 import { Notification } from '../components/Notification';
-
+import { useTranslation } from 'react-i18next';
+import CategoryManager from './CategoryManager';
 import { usePromptManagement } from '../hooks/usePromptManagement';
 
 // サイドパネル用スタイル - Chrome拡張機能サイドパネルに適したコンパクトな構造
@@ -19,8 +20,15 @@ const sidePanelStyles = {
   notificationArea: "min-h-8"
 };
 
+const TABS = [
+  { key: 'prompt', label: 'プロンプト管理' },
+  { key: 'category', label: 'カテゴリ管理' },
+];
+
 // SidePanelコンポーネント本体
 const SidePanel: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const [activeTab, setActiveTab] = useState<'prompt' | 'category'>('prompt');
   const {
     filteredPrompts,
     modalOpen,
@@ -46,18 +54,47 @@ const SidePanel: React.FC = () => {
           <svg className={sidePanelStyles.titleIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          Prompt Pocket
+          {t('app_title')}
         </h1>
-        <button
-          className={sidePanelStyles.addButton}
-          onClick={handleAdd}
-          title="新規プロンプト追加"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            className={sidePanelStyles.addButton}
+            onClick={handleAdd}
+            title={t('add_prompt')}
+            disabled={activeTab !== 'prompt'}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </button>
+          {/* 言語切替ボタン */}
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-md inline-flex items-center justify-center font-bold text-xs transition-colors"
+            onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')}
+            title={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
+            style={{ minWidth: 32 }}
+          >
+            {i18n.language === 'en' ? 'JA' : 'EN'}
+          </button>
+        </div>
       </header>
+
+      {/* タブUI */}
+      <div className="flex border-b border-slate-200 bg-white px-3">
+        {TABS.map(tab => (
+          <button
+            key={tab.key}
+            className={`py-2 px-4 -mb-px border-b-2 text-sm font-medium transition-colors duration-150 ${
+              activeTab === tab.key
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-slate-500 hover:text-blue-500'
+            }`}
+            onClick={() => setActiveTab(tab.key as 'prompt' | 'category')}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
       {/* 通知エリア */}
       <div className={sidePanelStyles.notificationContainer}>
@@ -70,18 +107,22 @@ const SidePanel: React.FC = () => {
         </div>
       </div>
 
-      {/* メインコンテンツエリア - (単一カラム) */}
+      {/* メインコンテンツエリア */}
       <main className={sidePanelStyles.mainContent}>
-        <PromptList
-          prompts={filteredPrompts}
-          onEditPrompt={handleEditPrompt}
-          onDeletePrompt={handleDeletePrompt}
-          onPastePrompt={handlePastePrompt}
-        />
+        {activeTab === 'prompt' ? (
+          <PromptList
+            prompts={filteredPrompts}
+            onEditPrompt={handleEditPrompt}
+            onDeletePrompt={handleDeletePrompt}
+            onPastePrompt={handlePastePrompt}
+          />
+        ) : (
+          <CategoryManager />
+        )}
       </main>
 
       {/* モーダル */}
-      {modalOpen && (
+      {modalOpen && activeTab === 'prompt' && (
         <PromptModal
           isOpen={modalOpen}
           onClose={handleCloseModal}

@@ -5,6 +5,7 @@ import { promptService } from '../services/promptService';
 import { filterPrompts } from '../utils/promptUtils';
 import { NOTIFICATION_TIMEOUT_MS } from '../constants';
 import { PasteMessage, PasteResponse } from '../types/messaging';
+import { useTranslation } from 'react-i18next';
 
 export interface UsePromptManagementReturn {
   prompts: Prompt[];
@@ -39,16 +40,17 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
   const [notification, setNotification] = useState<{ message: string | null; type: NotificationType | null }>({ message: null, type: null });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { t } = useTranslation();
 
   const loadPrompts = useCallback(async () => {
     try {
       const loadedPrompts = await promptService.getAllPrompts();
       setPrompts(loadedPrompts);
     } catch (error) {
-      console.error("プロンプトの読み込みに失敗しました", error);
-      setNotification({ message: 'プロンプトの読み込みに失敗しました', type: NotificationType.ERROR });
+      console.error(t('error_load') || 'プロンプトの読み込みに失敗しました', error);
+      setNotification({ message: t('error_load') || 'プロンプトの読み込みに失敗しました', type: NotificationType.ERROR });
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadPrompts();
@@ -84,28 +86,28 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     try {
       if (modalMode === 'add') {
         await promptService.savePrompt({ ...data, isFavorite: false });
-        setNotification({ message: 'プロンプトを追加しました', type: NotificationType.SUCCESS });
+        setNotification({ message: t('success_add'), type: NotificationType.SUCCESS });
       } else if (modalMode === 'edit' && editingPrompt) {
         await promptService.updatePrompt(editingPrompt.id, data);
-        setNotification({ message: 'プロンプトを更新しました', type: NotificationType.SUCCESS });
+        setNotification({ message: t('success_update'), type: NotificationType.SUCCESS });
       }
       await loadPrompts();
     } catch (error) {
-      console.error("プロンプトの保存に失敗しました", error);
-      setNotification({ message: 'プロンプトの保存に失敗しました', type: NotificationType.ERROR });
+      console.error(t('error_save'), error);
+      setNotification({ message: t('error_save'), type: NotificationType.ERROR });
     } finally {
       handleCloseModal();
     }
   };
 
   const _handleDeleteInternal = async (promptId: string) => {
-    if (!window.confirm('本当に削除しますか？')) return;
+    if (!window.confirm(t('confirm_delete') || '本当に削除しますか？')) return;
     try {
       await promptService.deletePrompt(promptId);
-      setNotification({ message: 'プロンプトを削除しました', type: NotificationType.SUCCESS });
+      setNotification({ message: t('success_delete'), type: NotificationType.SUCCESS });
       await loadPrompts();
     } catch (error) {
-      setNotification({ message: '削除に失敗しました', type: NotificationType.ERROR });
+      setNotification({ message: t('error_delete'), type: NotificationType.ERROR });
     }
   };
 
@@ -123,7 +125,7 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
 
   const handleImportPrompts = async () => {
     if (!selectedFile) {
-      setNotification({ message: 'ファイルが選択されていません', type: NotificationType.ERROR });
+      setNotification({ message: t('file_selected_none'), type: NotificationType.ERROR });
       return;
     }
 
@@ -131,14 +133,14 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     reader.onload = async (e) => {
       const fileContent = e.target?.result as string;
       if (!fileContent) {
-        setNotification({ message: 'ファイルの内容を読み取れませんでした', type: NotificationType.ERROR });
+        setNotification({ message: t('error_import'), type: NotificationType.ERROR });
         return;
       }
 
       const fileName = selectedFile.name.replace(/\.[^/.]+$/, "");
 
       if (fileContent.trim() === '') {
-          setNotification({ message: 'ファイルが空です', type: NotificationType.ERROR });
+          setNotification({ message: t('error_import'), type: NotificationType.ERROR });
           return;
       }
       
@@ -149,16 +151,16 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
           isFavorite: false 
         });
 
-        setNotification({ message: `プロンプト「${fileName}」をインポートしました`, type: NotificationType.SUCCESS });
+        setNotification({ message: t('success_import', { title: fileName }), type: NotificationType.SUCCESS });
         await loadPrompts();
         handleCloseModal();
       } catch (error) {
-        console.error("プロンプトのインポートに失敗しました", error);
-        setNotification({ message: 'プロンプトのインポートに失敗しました', type: NotificationType.ERROR });
+        console.error(t('error_import'), error);
+        setNotification({ message: t('error_import'), type: NotificationType.ERROR });
       }
     };
     reader.onerror = () => {
-      setNotification({ message: 'ファイルの読み取りに失敗しました', type: NotificationType.ERROR });
+      setNotification({ message: t('error_import'), type: NotificationType.ERROR });
     };
     reader.readAsText(selectedFile);
   };
@@ -167,12 +169,12 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     try {
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       if (tabs.length === 0) {
-        setNotification({ message: 'アクティブなタブが見つかりません', type: NotificationType.ERROR });
+        setNotification({ message: t('error_no_active_tab'), type: NotificationType.ERROR });
         return;
       }
       const activeTab = tabs[0];
       if (!activeTab.id) {
-        setNotification({ message: 'アクティブなタブIDが取得できません', type: NotificationType.ERROR });
+        setNotification({ message: t('error_no_active_tab_id'), type: NotificationType.ERROR });
         return;
       }
 
@@ -180,23 +182,23 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
       const response: PasteResponse = await chrome.tabs.sendMessage(activeTab.id, message);
 
       if (response && response.success) {
-        setNotification({ message: 'プロンプトを入力欄に貼り付けました', type: NotificationType.SUCCESS });
+        setNotification({ message: t('success_paste'), type: NotificationType.SUCCESS });
       } else {
-        const errorMessage = response?.error || '貼り付けに失敗しました';
+        const errorMessage = response?.error || t('error_paste');
         setNotification({ message: errorMessage, type: NotificationType.ERROR });
         console.error('Paste error:', response?.error);
       }
     } catch (error: any) {
       console.error('Error sending paste message:', error);
-      let displayMessage = '貼り付け中にエラーが発生しました';
+      let displayMessage = t('error_paste_generic');
       if (error.message && error.message.includes('No matching message handler')) {
-        displayMessage = 'ページが応答しません。リロードするか、対象ページか確認してください。';
+        displayMessage = t('error_paste_no_handler');
       } else if (error.message) {
-        displayMessage = `エラー: ${error.message}`;
+        displayMessage = `${t('error')}: ${error.message}`;
       }
       setNotification({ message: displayMessage, type: NotificationType.ERROR });
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (notification.message) {
