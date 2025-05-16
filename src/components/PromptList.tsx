@@ -3,6 +3,7 @@
 import React from "react";
 import { Prompt } from "../types";
 import PromptItem, { PromptItemProps } from "./PromptItem";
+import { useTranslation } from 'react-i18next';
 
 // なぜこのprops構造なのか→一貫性・型安全性・コールバック引数の明確化のため
 export interface PromptListProps {
@@ -14,6 +15,7 @@ export interface PromptListProps {
 
 // PromptListはプロンプト配列をリスト表示し、各アクションを上位に伝播する
 const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDeletePrompt, onPastePrompt }) => {
+  const { t } = useTranslation();
   // 空状態の表示 - サイドパネルに適した超コンパクトな表示
   if (!prompts || prompts.length === 0) {
     return (
@@ -22,10 +24,10 @@ const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDelete
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
         <p className="text-sm font-medium text-slate-700 mb-1">
-          プロンプトがありません
+          {t('empty_list')}
         </p>
         <p className="text-xs text-slate-500 mb-3">
-          ヘッダーの「+」ボタンから作成しましょう
+          {t('create_from_header')}
         </p>
       </div>
     );
@@ -36,7 +38,7 @@ const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDelete
       {/* プロンプト件数表示 - よりコンパクトに */}
       <div className="mb-2 text-xs text-slate-500 flex items-center">
         <span className="bg-slate-100 text-slate-600 py-0.5 px-1.5 rounded mr-1 text-xs font-medium">{prompts.length}</span>
-        件のプロンプト
+        {t('prompt_count', { count: prompts.length })}
       </div>
       
       {/* リスト表示 - 余白を削減し、情報密度を最大化 */}
@@ -58,8 +60,8 @@ const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDelete
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-sm transition-colors flex items-center justify-center"
-            aria-label="トップに戻る"
-            title="トップに戻る"
+            aria-label={t('back_to_top')}
+            title={t('back_to_top')}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />

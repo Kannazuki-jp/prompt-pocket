@@ -2,6 +2,7 @@
 // なぜpropsで制御するか: 再利用性・状態管理の一元化のため
 import React, { useState, useEffect } from 'react';
 import { Prompt,PromptInput} from '../types';
+import { useTranslation } from 'react-i18next';
 
 export interface PromptModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
   onImportPrompts,
   selectedFile
 }) => {
+  const { t } = useTranslation();
   // フォームのローカル状態
   const [title, setTitle] = useState('');
   const [prompt, setPrompt] = useState('');
@@ -43,7 +45,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
   // 保存ボタン押下時のバリデーションとイベント伝播
   const handleSave = () => {
     if (!title.trim() || !prompt.trim()) {
-      setError('タイトルと本文は必須です');
+      setError(t('validation_required'));
       return;
     }
     onSave({ title: title.trim(), prompt: prompt.trim() });
@@ -73,18 +75,18 @@ export const PromptModal: React.FC<PromptModalProps> = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
         <h2 className="text-xl font-bold mb-4">
-          {editingPrompt ? 'プロンプト編集' : '新規プロンプト追加'}
+          {editingPrompt ? t('edit_prompt') : t('add_prompt')}
         </h2>
         <input
           type="text"
           className="border rounded p-2 w-full mb-2"
-          placeholder="タイトル"
+          placeholder={t('prompt_title')}
           value={title}
           onChange={e => setTitle(e.target.value)}
         />
         <textarea
           className="border rounded p-2 w-full h-32 mb-2"
-          placeholder="プロンプト本文"
+          placeholder={t('prompt_body')}
           value={prompt}
           onChange={e => setPrompt(e.target.value)}
         />
@@ -94,7 +96,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({
         {!editingPrompt && ( // 新規追加時のみ表示
           <div className="mb-4">
             <label htmlFor="prompt-file-input" className="block text-sm font-medium text-gray-700 mb-1">
-              ファイルからインポート
+              {t('import_from_file')}
             </label>
             <input
               id="prompt-file-input"
@@ -116,11 +118,11 @@ export const PromptModal: React.FC<PromptModalProps> = ({
           <button
             className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
             onClick={handleClose}
-          >キャンセル</button>
+          >{t('cancel')}</button>
           <button
             className={editingPrompt ? "bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded" : "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"}
             onClick={handleSaveClick}
-          >保存</button>
+          >{t('save')}</button>
         </div>
       </div>
     </div>

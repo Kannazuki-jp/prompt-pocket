@@ -4,6 +4,7 @@ import React from 'react';
 import { PromptModal } from '../components/PromptModal';
 import PromptList from '../components/PromptList';
 import { Notification } from '../components/Notification';
+import { useTranslation } from 'react-i18next';
 
 import { usePromptManagement } from '../hooks/usePromptManagement';
 
@@ -21,6 +22,7 @@ const sidePanelStyles = {
 
 // SidePanelコンポーネント本体
 const SidePanel: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const {
     filteredPrompts,
     modalOpen,
@@ -46,17 +48,28 @@ const SidePanel: React.FC = () => {
           <svg className={sidePanelStyles.titleIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          Prompt Pocket
+          {t('app_title')}
         </h1>
-        <button
-          className={sidePanelStyles.addButton}
-          onClick={handleAdd}
-          title="新規プロンプト追加"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            className={sidePanelStyles.addButton}
+            onClick={handleAdd}
+            title={t('add_prompt')}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </button>
+          {/* 言語切替ボタン */}
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-md inline-flex items-center justify-center font-bold text-xs transition-colors"
+            onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')}
+            title={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
+            style={{ minWidth: 32 }}
+          >
+            {i18n.language === 'en' ? 'JA' : 'EN'}
+          </button>
+        </div>
       </header>
 
       {/* 通知エリア */}
