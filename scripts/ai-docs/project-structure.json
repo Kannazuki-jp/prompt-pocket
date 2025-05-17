@@ -1,0 +1,212 @@
+{
+  "core": {
+    "type": "directory",
+    "children": {
+      "constants": {
+        "type": "directory",
+        "children": {
+          "app.ts": {
+            "type": "file",
+            "size": 45,
+            "mtime": "2025-05-17T15:34:35.620Z"
+          },
+          "selectors.ts": {
+            "type": "file",
+            "size": 429,
+            "mtime": "2025-05-17T15:39:12.710Z"
+          }
+        }
+      },
+      "types": {
+        "type": "directory",
+        "children": {
+          "index.ts": {
+            "type": "file",
+            "size": 1035,
+            "mtime": "2025-05-17T05:27:05.849Z"
+          },
+          "messaging.ts": {
+            "type": "file",
+            "size": 790,
+            "mtime": "2025-05-17T15:15:50.069Z"
+          },
+          "ui.ts": {
+            "type": "file",
+            "size": 227,
+            "mtime": "2025-05-14T19:47:19.626Z"
+          }
+        }
+      }
+    }
+  },
+  "features": {
+    "type": "directory",
+    "children": {
+      "content": {
+        "type": "directory",
+        "children": {
+          "contentScript.ts": {
+            "type": "file",
+            "size": 2254,
+            "mtime": "2025-05-17T16:37:06.283Z"
+          }
+        }
+      },
+      "prompt": {
+        "type": "directory",
+        "children": {
+          "promptService.ts": {
+            "type": "file",
+            "size": 4821,
+            "mtime": "2025-05-17T15:54:03.278Z"
+          }
+        }
+      },
+      "sidepanel": {
+        "type": "directory",
+        "children": {
+          "pages": {
+            "type": "directory",
+            "children": {
+              "CategoryManager.tsx": {
+                "type": "file",
+                "size": 7362,
+                "mtime": "2025-05-17T15:45:27.825Z"
+              },
+              "SidePanel.tsx": {
+                "type": "file",
+                "size": 7439,
+                "mtime": "2025-05-17T15:44:49.579Z"
+              }
+            }
+          },
+          "sidepanelScript.tsx": {
+            "type": "file",
+            "size": 819,
+            "mtime": "2025-05-17T15:55:49.820Z"
+          }
+        }
+      }
+    }
+  },
+  "i18n.ts": {
+    "type": "file",
+    "size": 441,
+    "mtime": "2025-05-16T15:48:29.328Z"
+  },
+  "index.css": {
+    "type": "file",
+    "size": 362,
+    "mtime": "2025-05-17T14:19:07.500Z"
+  },
+  "locales": {
+    "type": "directory",
+    "children": {
+      "en.json": {
+        "type": "file",
+        "size": 2259,
+        "mtime": "2025-05-17T05:32:48.860Z"
+      },
+      "ja.json": {
+        "type": "file",
+        "size": 2900,
+        "mtime": "2025-05-17T05:32:41.359Z"
+      }
+    }
+  },
+  "pages": {
+    "type": "directory",
+    "children": {
+      "CategoryManager.tsx": {
+        "type": "file",
+        "size": 7183,
+        "mtime": "2025-05-17T16:36:13.055Z"
+      },
+      "Popup.css": {
+        "type": "file",
+        "size": 648,
+        "mtime": "2025-05-16T13:45:22.271Z"
+      },
+      "SidePanel.tsx": {
+        "type": "file",
+        "size": 7222,
+        "mtime": "2025-05-17T06:01:32.929Z"
+      }
+    }
+  },
+  "shared": {
+    "type": "directory",
+    "children": {
+      "components": {
+        "type": "directory",
+        "children": {
+          "CategorySidebar.tsx": {
+            "type": "file",
+            "size": 4262,
+            "mtime": "2025-05-16T17:39:45.570Z"
+          },
+          "Notification.tsx": {
+            "type": "file",
+            "size": 1397,
+            "mtime": "2025-05-14T17:25:39.054Z"
+          },
+          "PromptItem.tsx": {
+            "type": "file",
+            "size": 4868,
+            "mtime": "2025-05-17T06:09:16.450Z"
+          },
+          "PromptList.tsx": {
+            "type": "file",
+            "size": 4797,
+            "mtime": "2025-05-17T15:35:34.080Z"
+          },
+          "PromptModal.tsx": {
+            "type": "file",
+            "size": 10909,
+            "mtime": "2025-05-17T15:35:44.952Z"
+          },
+          "SearchBar.tsx": {
+            "type": "file",
+            "size": 1259,
+            "mtime": "2025-05-16T13:46:53.440Z"
+          }
+        }
+      },
+      "usePromptManagement.ts": {
+        "type": "file",
+        "size": 8413,
+        "mtime": "2025-05-17T15:51:27.967Z"
+      },
+      "utils": {
+        "type": "directory",
+        "children": {
+          "promptUtils.ts": {
+            "type": "file",
+            "size": 864,
+            "mtime": "2025-05-17T15:50:51.151Z"
+          },
+          "storage.ts": {
+            "type": "file",
+            "size": 3301,
+            "mtime": "2025-05-17T15:52:16.862Z"
+          }
+        }
+      }
+    }
+  },
+  "styles.css": {
+    "type": "file",
+    "size": 612,
+    "mtime": "2025-05-17T14:40:01.949Z"
+  },
+  "utils": {
+    "type": "directory",
+    "children": {
+      "dom.ts": {
+        "type": "file",
+        "size": 1327,
+        "mtime": "2025-05-17T15:16:06.827Z"
+      }
+    }
+  }
+}
