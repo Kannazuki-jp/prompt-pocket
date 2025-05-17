@@ -1,18 +1,14 @@
 // プロンプト管理サイドパネルのメインコンポーネント
 // なぜ状態をここで一元管理するか: UIとデータの同期・一貫性のため
 import React, { useState } from 'react';
-import { PromptModal } from '../components/PromptModal';
-import PromptList from '../components/PromptList';
-import { Notification } from '../components/Notification';
+import { PromptModal } from '../shared/components/PromptModal';
+import PromptList from '../shared/components/PromptList';
+import { Notification } from '../shared/components/Notification';
 import { useTranslation } from 'react-i18next';
-<<<<<<< HEAD
-
-=======
 import { FiPlus } from 'react-icons/fi';
 import ReactCountryFlag from 'react-country-flag';
 import CategoryManager from './CategoryManager';
->>>>>>> feature/ai-document
-import { usePromptManagement } from '../hooks/usePromptManagement';
+import { usePromptManagement } from '../shared/usePromptManagement';
 
 // サイドパネル用スタイル - モダンでスタイリッシュなデザインに更新
 const sidePanelStyles = {
@@ -32,12 +28,12 @@ const TABS = [
 ];
 
 // SidePanelコンポーネント本体
+// タブの型を定義
+type TabType = 'prompt' | 'category';
+
 const SidePanel: React.FC = () => {
   const { t, i18n } = useTranslation();
-<<<<<<< HEAD
-=======
-  const [activeTab, setActiveTab] = useState<'prompt' | 'category'>('prompt');
->>>>>>> feature/ai-document
+  const [activeTab, setActiveTab] = useState<TabType>('prompt');
   const {
     filteredPrompts,
     modalOpen,
@@ -65,26 +61,6 @@ const SidePanel: React.FC = () => {
           </svg>
           {t('app_title')}
         </h1>
-<<<<<<< HEAD
-        <div className="flex items-center space-x-2">
-          <button
-            className={sidePanelStyles.addButton}
-            onClick={handleAdd}
-            title={t('add_prompt')}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </button>
-          {/* 言語切替ボタン */}
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-md inline-flex items-center justify-center font-bold text-xs transition-colors"
-            onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')}
-            title={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
-            style={{ minWidth: 32 }}
-          >
-            {i18n.language === 'en' ? 'JA' : 'EN'}
-=======
         <div className="flex items-center space-x-2.5">
           <button
             className={`${activeTab !== 'prompt' ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white p-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center`}
@@ -104,7 +80,7 @@ const SidePanel: React.FC = () => {
             aria-label={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
           >
             {i18n.language === 'en' ? (
-              <ReactCountryFlag 
+              <ReactCountryFlag
                 countryCode="US"
                 svg
                 style={{
@@ -116,7 +92,7 @@ const SidePanel: React.FC = () => {
                 title="United States"
               />
             ) : (
-              <ReactCountryFlag 
+              <ReactCountryFlag
                 countryCode="JP"
                 svg
                 style={{
@@ -129,7 +105,6 @@ const SidePanel: React.FC = () => {
               />
             )}
             <span className="sr-only">{i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}</span>
->>>>>>> feature/ai-document
           </button>
         </div>
       </header>
