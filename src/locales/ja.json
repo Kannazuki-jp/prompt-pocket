@@ -59,5 +59,10 @@
   "prompt_title_placeholder": "タイトルを入力",
   "prompt_body_placeholder": "プロンプトを入力",
   "choose_file": "ファイルを選択",
-  "drag_drop_or_click": "ファイルをドラッグ＆ドロップ、またはクリックして選択"
+  "drag_drop_or_click": "ファイルをドラッグ＆ドロップ、またはクリックして選択",
+  "variable_replacement": "変数の置換",
+  "variable_replacement_description": "このプロンプトには変数が含まれています。各変数に値を入力してください。",
+  "click_to_paste": "クリックして貼り付け",
+  "paste": "貼り付け",
+  "validation_required_all_variables": "すべての変数に値を入力してください"
 }

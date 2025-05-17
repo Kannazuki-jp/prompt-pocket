@@ -9,6 +9,7 @@ import { FiPlus } from 'react-icons/fi';
 import ReactCountryFlag from 'react-country-flag';
 import CategoryManager from './CategoryManager';
 import { usePromptManagement } from '../shared/usePromptManagement';
+import { VariableModal } from '../shared/components/VariableModal';
 
 // サイドパネル用スタイル - モダンでスタイリッシュなデザインに更新
 const sidePanelStyles = {
@@ -49,6 +50,12 @@ const SidePanel: React.FC = () => {
     handleFileChange,
     handleImportPrompts,
     selectedFile,
+    // 変数置換関連
+    variableModalOpen,
+    currentPromptText,
+    promptVariables,
+    handleVariableModalClose,
+    handleVariableSubmit,
   } = usePromptManagement();
 
   return (
@@ -156,7 +163,7 @@ const SidePanel: React.FC = () => {
         )}
       </main>
 
-      {/* モーダル */}
+      {/* プロンプト編集モーダル */}
       {modalOpen && activeTab === 'prompt' && (
         <PromptModal
           isOpen={modalOpen}
@@ -166,6 +173,16 @@ const SidePanel: React.FC = () => {
           onFileChange={handleFileChange}
           onImportPrompts={handleImportPrompts}
           selectedFile={selectedFile}
+        />
+      )}
+
+      {/* 変数置換モーダル */}
+      {variableModalOpen && (
+        <VariableModal
+          isOpen={variableModalOpen}
+          onClose={handleVariableModalClose}
+          variables={promptVariables}
+          onComplete={handleVariableSubmit}
         />
       )}
     </div>

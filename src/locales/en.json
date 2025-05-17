@@ -59,5 +59,10 @@
   "prompt_title_placeholder": "Enter title",
   "prompt_body_placeholder": "Enter prompt",
   "choose_file": "Choose file",
-  "drag_drop_or_click": "Drag & drop a file or click to select"
+  "drag_drop_or_click": "Drag & drop a file or click to select",
+  "variable_replacement": "Variable Replacement",
+  "variable_replacement_description": "This prompt contains variables. Please enter values for each variable.",
+  "click_to_paste": "Click to paste",
+  "paste": "Paste",
+  "validation_required_all_variables": "Please enter values for all variables"
 }

@@ -6,6 +6,7 @@ import { filterPrompts } from './utils/promptUtils';
 import { NOTIFICATION_TIMEOUT_MS } from '../core/constants/app';
 import { PasteMessage, PasteResponse } from '../core/types/messaging';
 import { useTranslation } from 'react-i18next';
+import { extractVariables, hasVariables, replaceVariables } from './utils/templateUtils';
 
 export interface UsePromptManagementReturn {
   prompts: Prompt[];
@@ -29,6 +30,12 @@ export interface UsePromptManagementReturn {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleImportPrompts: () => Promise<void>;
   selectedFile: File | null;
+  // 変数置換関連
+  variableModalOpen: boolean;
+  currentPromptText: string;
+  promptVariables: string[];
+  handleVariableModalClose: () => void;
+  handleVariableSubmit: (values: Record<string, string>) => Promise<void>;
 }
 
 export const usePromptManagement = (): UsePromptManagementReturn => {
@@ -40,6 +47,10 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
   const [editingPrompt, setEditingPrompt] = useState<Prompt | null>(null);
   const [notification, setNotification] = useState<{ message: string | null; type: NotificationType | null }>({ message: null, type: null });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // 変数置換関連の状態
+  const [variableModalOpen, setVariableModalOpen] = useState(false);
+  const [currentPromptText, setCurrentPromptText] = useState('');
+  const [promptVariables, setPromptVariables] = useState<string[]>([]);
   const { t } = useTranslation();
 
   const loadPrompts = useCallback(async () => {
@@ -165,17 +176,43 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     reader.readAsText(selectedFile);
   };
 
-  const handlePastePrompt = useCallback(async (text: string) => {
+  // 変数モーダルを閉じる処理
+  const handleVariableModalClose = () => {
+    setVariableModalOpen(false);
+    setCurrentPromptText('');
+    setPromptVariables([]);
+  };
+
+  // 変数置換後のプロンプトを貼り付ける処理
+  const handleVariableSubmit = async (values: Record<string, string>) => {
+    try {
+      // 変数を置換したテキストを生成
+      const replacedText = replaceVariables(currentPromptText, values);
+      
+      // 置換したテキストを貼り付け
+      await pasteTextToActiveTab(replacedText);
+      
+      // モーダルを閉じる
+      handleVariableModalClose();
+    } catch (error: any) {
+      console.error('Error in variable replacement:', error);
+      setNotification({ 
+        message: `${t('error')}: ${error.message || t('error_paste_generic')}`, 
+        type: NotificationType.ERROR 
+      });
+    }
+  };
+
+  // アクティブなタブにテキストを貼り付ける共通関数
+  const pasteTextToActiveTab = async (text: string) => {
     try {
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       if (tabs.length === 0) {
-        setNotification({ message: t('error_no_active_tab'), type: NotificationType.ERROR });
-        return;
+        throw new Error(t('error_no_active_tab'));
       }
       const activeTab = tabs[0];
       if (!activeTab.id) {
-        setNotification({ message: t('error_no_active_tab_id'), type: NotificationType.ERROR });
-        return;
+        throw new Error(t('error_no_active_tab_id'));
       }
 
       const message: PasteMessage = { type: 'PASTE_PROMPT', text };
@@ -184,9 +221,7 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
       if (response && response.success) {
         setNotification({ message: t('success_paste'), type: NotificationType.SUCCESS });
       } else {
-        const errorMessage = response?.error || t('error_paste');
-        setNotification({ message: errorMessage, type: NotificationType.ERROR });
-        console.error('Paste error:', response?.error);
+        throw new Error(response?.error || t('error_paste'));
       }
     } catch (error: any) {
       console.error('Error sending paste message:', error);
@@ -197,6 +232,42 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
         displayMessage = `${t('error')}: ${error.message}`;
       }
       setNotification({ message: displayMessage, type: NotificationType.ERROR });
+      throw error; // エラーを再スローして呼び出し元でもキャッチできるようにする
+    }
+  };
+
+  // プロンプトの貼り付け処理
+  const handlePastePrompt = useCallback(async (text: string) => {
+    try {
+      // デバッグ用ログ
+      console.log('貼り付けるテキスト:', text);
+      
+      // プロンプトに変数が含まれているかチェック
+      const containsVariables = hasVariables(text);
+      console.log('変数を含んでいるか:', containsVariables);
+      
+      if (containsVariables) {
+        // 変数を抽出
+        const variables = extractVariables(text);
+        console.log('検出された変数:', variables);
+        
+        if (variables.length > 0) {
+          console.log('変数モーダルを表示します');
+          // 変数置換モーダルを表示するための状態をセット
+          setCurrentPromptText(text);
+          setPromptVariables(variables);
+          setVariableModalOpen(true);
+          console.log('variableModalOpen:', true);
+          return; // 変数モーダルで処理するのでここで終了
+        }
+      }
+      
+      console.log('変数なし、直接貼り付けます');
+      // 変数がない場合は直接貼り付け
+      await pasteTextToActiveTab(text);
+    } catch (error: any) {
+      console.error('Error in paste prompt:', error);
+      // エラー処理はpasteTextToActiveTab内で行われるため、ここでは何もしない
     }
   }, [t]);
 
@@ -236,5 +307,11 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     handleFileChange,
     handleImportPrompts,
     selectedFile,
+    // 変数置換関連
+    variableModalOpen,
+    currentPromptText,
+    promptVariables,
+    handleVariableModalClose,
+    handleVariableSubmit,
   };
-}; 
+};
