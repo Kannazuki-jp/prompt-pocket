@@ -1,12 +1,7 @@
 {
   "app_title": "Prompt Pocket",
-<<<<<<< HEAD
   "add_prompt": "新規プロンプト追加",
   "edit_prompt": "プロンプト編集",
-=======
-  "add_prompt": "プロンプトを追加",
-  "edit_prompt": "プロンプトを編集",
->>>>>>> feature/ai-document
   "prompt_title": "タイトル",
   "prompt_body": "プロンプト本文",
   "import_from_file": "ファイルからインポート",
@@ -21,11 +16,7 @@
   "error_import": "プロンプトのインポートに失敗しました。",
   "error_save": "プロンプトの保存に失敗しました。",
   "error_delete": "プロンプトの削除に失敗しました。",
-<<<<<<< HEAD
-  "validation_required": "タイトルと本文は必須です。",
-=======
   "validation_required": "タイトルとプロンプト本文は必須です",
->>>>>>> feature/ai-document
   "error_load": "プロンプトの読み込みに失敗しました。",
   "confirm_delete": "本当に削除しますか？",
   "error_no_active_tab": "アクティブなタブが見つかりません",
@@ -38,9 +29,6 @@
   "empty_list": "プロンプトがありません",
   "create_from_header": "ヘッダーの「+」ボタンから作成しましょう",
   "prompt_count": "{{count}}件のプロンプト",
-<<<<<<< HEAD
-  "back_to_top": "トップに戻る"
-=======
   "back_to_top": "トップに戻る",
   "delete": "削除",
   "search": "検索",
@@ -72,5 +60,4 @@
   "prompt_body_placeholder": "プロンプトを入力",
   "choose_file": "ファイルを選択",
   "drag_drop_or_click": "ファイルをドラッグ＆ドロップ、またはクリックして選択"
->>>>>>> feature/ai-document
 }

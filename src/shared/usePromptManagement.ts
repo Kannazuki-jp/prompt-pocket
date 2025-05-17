@@ -1,19 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-<<<<<<< HEAD:src/hooks/usePromptManagement.ts
-import { Prompt, PromptInput } from '../types';
-import { NotificationType } from '../types/ui';
-import { promptService } from '../services/promptService';
-import { filterPrompts } from '../utils/promptUtils';
-import { NOTIFICATION_TIMEOUT_MS } from '../constants';
-import { PasteMessage, PasteResponse } from '../types/messaging';
-=======
 import { Prompt, PromptInput } from '../core/types';
 import { NotificationType } from '../core/types/ui';
 import { promptService } from '../features/prompt/promptService';
 import { filterPrompts } from './utils/promptUtils';
 import { NOTIFICATION_TIMEOUT_MS } from '../core/constants/app';
 import { PasteMessage, PasteResponse } from '../core/types/messaging';
->>>>>>> feature/ai-document:src/shared/usePromptManagement.ts
 import { useTranslation } from 'react-i18next';
 
 export interface UsePromptManagementReturn {
