@@ -16,9 +16,19 @@ function reloadTargetTabs() {
 }
 
 export default {
-  main() {
+  async main() {
     // バックグラウンドスクリプトの初期化
     console.log("プロンプトポケットのバックグラウンドが起動しました");
+
+    // アイコンクリックでサイドパネルを開く
+    chrome.action.onClicked.addListener(async (tab) => {
+      try {
+        // サイドパネルを開く
+        await chrome.sidePanel.open({ windowId: tab.windowId });
+      } catch (error) {
+        console.error('サイドパネルを開けませんでした:', error);
+      }
+    });
 
     // 拡張機能インストール時の処理
     chrome.runtime.onInstalled.addListener((details) => {

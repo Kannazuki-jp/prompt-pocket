@@ -18,8 +18,7 @@
     "tabs"
   ],
   "action": {
-    "default_title": "Prompt Pocket",
-    "default_popup": "popup.html"
+    "default_title": "Prompt Pocket"
   },
   "host_permissions": [
     "https://chatgpt.com/*",

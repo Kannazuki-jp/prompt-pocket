@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Category } from '../types';
-import { getCategories, createCategory, updateCategory, deleteCategory } from '../services/promptService';
+import { Category } from '../core/types';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../features/prompt/promptService';
 import { useTranslation } from 'react-i18next';
 import { FiEdit2, FiTrash2, FiCheck, FiX, FiPlus } from 'react-icons/fi';
 

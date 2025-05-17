@@ -33,7 +33,6 @@ export default defineConfig({
     },
     action: {
       default_title: 'Prompt Pocket',
-      default_popup: 'popup.html',
     },
     host_permissions: [
         "https://chatgpt.com/*",
