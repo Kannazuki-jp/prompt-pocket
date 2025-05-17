@@ -6,6 +6,7 @@ import PromptList from '../components/PromptList';
 import { Notification } from '../components/Notification';
 import { useTranslation } from 'react-i18next';
 import { FiPlus } from 'react-icons/fi';
+import ReactCountryFlag from 'react-country-flag';
 import CategoryManager from './CategoryManager';
 import { usePromptManagement } from '../hooks/usePromptManagement';
 
@@ -59,24 +60,48 @@ const SidePanel: React.FC = () => {
         </h1>
         <div className="flex items-center space-x-2.5">
           <button
-            className={`${sidePanelStyles.addButton} ${activeTab !== 'prompt' ? 'opacity-50 cursor-not-allowed' : ''} group relative overflow-hidden`}
+            className={`${activeTab !== 'prompt' ? 'opacity-50 cursor-not-allowed' : ''} bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white p-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center`}
             onClick={handleAdd}
             title={t('add_prompt')}
             disabled={activeTab !== 'prompt'}
+            aria-label={t('add_prompt')}
           >
-            <span className="relative z-10 flex items-center">
-              <FiPlus className="w-4 h-4 mr-1.5" />
-              <span className="text-sm font-medium">{t('add_prompt')}</span>
-            </span>
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <FiPlus className="w-4 h-4" />
+            <span className="sr-only">{t('add_prompt')}</span>
           </button>
-          {/* 言語切替ボタン */}
+          {/* 言語切替ボタン - react-country-flag を使用 */}
           <button
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-xs font-bold p-1.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md min-w-[36px] flex items-center justify-center"
+            className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
             onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')}
             title={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
+            aria-label={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
           >
-            {i18n.language === 'en' ? 'JA' : 'EN'}
+            {i18n.language === 'en' ? (
+              <ReactCountryFlag 
+                countryCode="US"
+                svg
+                style={{
+                  width: '1.25rem',
+                  height: '1.25rem',
+                  borderRadius: '0.125rem',
+                  overflow: 'hidden'
+                }}
+                title="United States"
+              />
+            ) : (
+              <ReactCountryFlag 
+                countryCode="JP"
+                svg
+                style={{
+                  width: '1.25rem',
+                  height: '1.25rem',
+                  borderRadius: '0.125rem',
+                  overflow: 'hidden'
+                }}
+                title="Japan"
+              />
+            )}
+            <span className="sr-only">{i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}</span>
           </button>
         </div>
       </header>
