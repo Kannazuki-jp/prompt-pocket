@@ -52,6 +52,12 @@
     "save": "保存",
     "cancel": "キャンセル",
     "edit": "編集",
-    "delete": "削除"
-  }
+    "delete": "削除",
+    "close": "閉じる",
+    "update": "更新"
+  },
+  "prompt_title_placeholder": "タイトルを入力",
+  "prompt_body_placeholder": "プロンプトを入力",
+  "choose_file": "ファイルを選択",
+  "drag_drop_or_click": "ファイルをドラッグ＆ドロップ、またはクリックして選択"
 }

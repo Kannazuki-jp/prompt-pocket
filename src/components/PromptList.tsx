@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Prompt, Category } from "../types";
 import PromptItem, { PromptItemProps } from "./PromptItem";
+import { FiChevronUp, FiFolder, FiMessageSquare, FiPlus } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { getCategories } from '../services/promptService';
 
@@ -29,17 +30,22 @@ const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDelete
     return cat ? cat.name : undefined;
   };
 
-  // 空状態の表示 - サイドパネルに適した超コンパクトな表示
+  // 空状態の表示 - モダンなデザインに更新
   if (!prompts || prompts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-48 mt-4 text-center px-4">
-        <svg className="w-12 h-12 text-slate-200 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <p className="text-sm font-medium text-slate-700 mb-1">
+      <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-white/50 dark:bg-slate-800/30 rounded-xl border border-slate-200/80 dark:border-slate-700/50 backdrop-blur-sm">
+        <div className="relative mb-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl flex items-center justify-center">
+            <FiMessageSquare className="w-8 h-8 text-blue-500 dark:text-blue-400" />
+          </div>
+          <div className="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 dark:bg-blue-600 rounded-full flex items-center justify-center">
+            <FiPlus className="w-3 h-3 text-white" />
+          </div>
+        </div>
+        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-1">
           {t('empty_list')}
-        </p>
-        <p className="text-xs text-slate-500 mb-3">
+        </h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">
           {t('create_from_header')}
         </p>
       </div>
@@ -48,38 +54,43 @@ const PromptList: React.FC<PromptListProps> = ({ prompts, onEditPrompt, onDelete
   // プロンプトがある場合は、サイドパネルに最適化されたリスト表示を実装
   return (
     <div className="relative">
-      {/* プロンプト件数表示 - よりコンパクトに */}
-      <div className="mb-2 text-xs text-slate-500 flex items-center">
-        <span className="bg-slate-100 text-slate-600 py-0.5 px-1.5 rounded mr-1 text-xs font-medium">{prompts.length}</span>
-        {t('prompt_count', { count: prompts.length })}
+      {/* プロンプト件数表示 */}
+      <div className="mb-3 text-sm text-slate-500 dark:text-slate-400 flex items-center">
+        <span className="bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-slate-700 dark:to-slate-800 text-slate-700 dark:text-slate-300 py-1 px-2.5 rounded-full text-xs font-medium flex items-center">
+          <FiMessageSquare className="w-3.5 h-3.5 mr-1.5 text-blue-500" />
+          <span>{prompts.length} {t('prompt_count', { count: prompts.length })}</span>
+        </span>
       </div>
       
-      {/* リスト表示 - 余白を削減し、情報密度を最大化 */}
-      <div className="rounded-md overflow-hidden w-full space-y-4">
+      {/* リスト表示 */}
+      <div className="space-y-3">
         {prompts.map((prompt, index) => (
-          <PromptItem
-            key={prompt.id}
-            prompt={prompt}
-            onEdit={onEditPrompt}
-            onDelete={onDeletePrompt}
-            onPaste={onPastePrompt}
-            categoryName={getCategoryName(prompt.categoryId)}
-          />
+          <div 
+            key={prompt.id} 
+            className="group relative overflow-hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl border border-slate-200/80 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all duration-300"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-700/50 dark:to-slate-800/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <PromptItem
+              prompt={prompt}
+              onEdit={onEditPrompt}
+              onDelete={onDeletePrompt}
+              onPaste={onPastePrompt}
+              categoryName={getCategoryName(prompt.categoryId)}
+            />
+          </div>
         ))}
       </div>
       
-      {/* プロンプトが多い場合は小さな「上に戻る」ボタンを表示 */}
+      {/* スクロールトップボタン */}
       {prompts.length > 5 && (
-        <div className="fixed bottom-4 right-4 z-10">
+        <div className="fixed bottom-6 right-6 z-10 group">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-sm transition-colors flex items-center justify-center"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white p-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center transform hover:-translate-y-0.5"
             aria-label={t('back_to_top')}
             title={t('back_to_top')}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
+            <FiChevronUp className="w-4 h-4" />
           </button>
         </div>
       )}

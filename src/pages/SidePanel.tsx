@@ -5,19 +5,20 @@ import { PromptModal } from '../components/PromptModal';
 import PromptList from '../components/PromptList';
 import { Notification } from '../components/Notification';
 import { useTranslation } from 'react-i18next';
+import { FiPlus } from 'react-icons/fi';
 import CategoryManager from './CategoryManager';
 import { usePromptManagement } from '../hooks/usePromptManagement';
 
-// サイドパネル用スタイル - Chrome拡張機能サイドパネルに適したコンパクトな構造
+// サイドパネル用スタイル - モダンでスタイリッシュなデザインに更新
 const sidePanelStyles = {
-  container: "h-screen flex flex-col bg-slate-50",
-  header: "sticky top-0 bg-white border-b border-slate-200 px-3 py-2 z-10 shadow-sm flex items-center justify-between",
-  title: "text-lg font-semibold text-slate-800 flex items-center",
-  titleIcon: "w-5 h-5 mr-1.5 text-blue-500", // 旧スタイルから追加
-  addButton: "bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-md inline-flex items-center justify-center transition-colors", // 旧スタイルから追加
-  mainContent: "flex-grow overflow-y-auto px-3 py-2", // 旧スタイルから mainArea を mainContent に変更し、sidebar を削除
-  notificationContainer: "sticky top-[calc(theme(spacing.12)+1px)] z-10 w-full px-3 py-1", // ヘッダーの高さに応じて調整、旧スタイルを参考に新規追加
-  notificationArea: "min-h-8"
+  container: "h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 text-slate-800 dark:text-slate-100",
+  header: "sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-b border-slate-200/80 dark:border-slate-700/50 px-4 py-3 z-20 shadow-sm flex items-center justify-between",
+  title: "text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent flex items-center",
+  titleIcon: "w-5 h-5 mr-2 text-indigo-500",
+  addButton: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white p-2 rounded-lg inline-flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md",
+  mainContent: "flex-grow overflow-y-auto px-4 py-3 bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm",
+  notificationContainer: "sticky top-16 z-10 w-full px-4 py-1.5",
+  notificationArea: "min-h-8 transition-all duration-300"
 };
 
 const TABS = [
@@ -56,23 +57,24 @@ const SidePanel: React.FC = () => {
           </svg>
           {t('app_title')}
         </h1>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <button
-            className={sidePanelStyles.addButton}
+            className={`${sidePanelStyles.addButton} ${activeTab !== 'prompt' ? 'opacity-50 cursor-not-allowed' : ''} group relative overflow-hidden`}
             onClick={handleAdd}
             title={t('add_prompt')}
             disabled={activeTab !== 'prompt'}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
+            <span className="relative z-10 flex items-center">
+              <FiPlus className="w-4 h-4 mr-1.5" />
+              <span className="text-sm font-medium">{t('add_prompt')}</span>
+            </span>
+            <span className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
           </button>
           {/* 言語切替ボタン */}
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-md inline-flex items-center justify-center font-bold text-xs transition-colors"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-xs font-bold p-1.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md min-w-[36px] flex items-center justify-center"
             onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ja' : 'en')}
             title={i18n.language === 'en' ? '日本語に切替' : 'Switch to English'}
-            style={{ minWidth: 32 }}
           >
             {i18n.language === 'en' ? 'JA' : 'EN'}
           </button>
@@ -80,20 +82,25 @@ const SidePanel: React.FC = () => {
       </header>
 
       {/* タブUI */}
-      <div className="flex border-b border-slate-200 bg-white px-3">
-        {TABS.map(tab => (
-          <button
-            key={tab.key}
-            className={`py-2 px-4 -mb-px border-b-2 text-sm font-medium transition-colors duration-150 ${
-              activeTab === tab.key
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-slate-500 hover:text-blue-500'
-            }`}
-            onClick={() => setActiveTab(tab.key as 'prompt' | 'category')}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className="relative px-4 pt-1 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-b border-slate-200/80 dark:border-slate-700/50">
+        <div className="flex">
+          {TABS.map((tab, index) => (
+            <button
+              key={tab.key}
+              className={`relative px-4 py-2.5 text-sm font-medium transition-all duration-300 ${
+                activeTab === tab.key
+                  ? 'text-indigo-600 dark:text-indigo-400'
+                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+              }`}
+              onClick={() => setActiveTab(tab.key as 'prompt' | 'category')}
+            >
+              {tab.label}
+              {activeTab === tab.key && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t"></span>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 通知エリア */}

@@ -27,14 +27,20 @@ function setStorageData<T>(key: string, value: T): Promise<void> {
 export async function getAllPrompts(): Promise<Prompt[]> {
   // データがない場合は空配列を返す
   const prompts = await getStorageData<Prompt[]>(STORAGE_KEY);
-  return Array.isArray(prompts) ? prompts : [];
+  if (!Array.isArray(prompts)) return [];
+  
+  // 各プロンプトのIDが文字列であることを保証する
+  return prompts.map(prompt => ({
+    ...prompt,
+    id: String(prompt.id) // IDを文字列に変換
+  }));
 }
 
 // プロンプトを新規保存
 export async function savePrompt(promptData: Omit<Prompt, 'id' | 'createdAt' | 'updatedAt'>): Promise<Prompt> {
   // なぜUUID+タイムスタンプを生成するか: 一意性と時系列管理のため
   const newPrompt: Prompt = {
-    id: crypto.randomUUID(),
+    id: String(crypto.randomUUID()), // IDを明示的に文字列に変換
     title: promptData.title,
     prompt: promptData.prompt,
     isFavorite: promptData.isFavorite,
@@ -56,14 +62,17 @@ export async function savePrompt(promptData: Omit<Prompt, 'id' | 'createdAt' | '
 export async function updatePrompt(promptId: string, updatedData: Partial<Omit<Prompt, 'id' | 'createdAt'>>): Promise<Prompt | null> {
   try {
     const prompts = await getAllPrompts();
-    const idx = prompts.findIndex(p => p.id === promptId);
-    if (idx === -1) return null; // なぜnull返すか: 見つからない場合の明示的な失敗
+    // promptId を文字列に変換して比較
+    const index = prompts.findIndex((p) => p.id === String(promptId));
+    if (index === -1) return null;
+    
     const updatedPrompt: Prompt = {
-      ...prompts[idx],
+      ...prompts[index],
       ...updatedData,
-      updatedAt: Date.now(), // 更新日時は常に現在時刻
+      updatedAt: Date.now(),
     };
-    prompts[idx] = updatedPrompt;
+    
+    prompts[index] = updatedPrompt;
     await setStorageData(STORAGE_KEY, prompts);
     return updatedPrompt;
   } catch (e) {
@@ -76,8 +85,9 @@ export async function updatePrompt(promptId: string, updatedData: Partial<Omit<P
 export async function deletePrompt(promptId: string): Promise<void> {
   try {
     const prompts = await getAllPrompts();
-    const newPrompts = prompts.filter(p => p.id !== promptId);
-    await setStorageData(STORAGE_KEY, newPrompts);
+    // promptId を文字列に変換して比較
+    const filtered = prompts.filter((p) => p.id !== String(promptId));
+    await setStorageData(STORAGE_KEY, filtered);
   } catch (e) {
     console.error('Failed to delete prompt', e);
     throw e;

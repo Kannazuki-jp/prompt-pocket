@@ -1,6 +1,7 @@
 import React from "react";
-import { FaPaperPlane, FaEdit, FaTrash } from "react-icons/fa";
+import { FiSend, FiEdit2, FiTrash2, FiClock } from "react-icons/fi";
 import { Prompt } from "../types";
+import { useTranslation } from 'react-i18next';
 
 // propsの型定義：なぜこうするか→明示的な型で型安全性を担保し、各アクションのコールバック引数を明確にするため
 export interface PromptItemProps {
@@ -13,83 +14,103 @@ export interface PromptItemProps {
 
 // PromptItemは1つのプロンプトをカード形式で表示し、アクションボタンを提供する
 const PromptItem: React.FC<PromptItemProps> = ({ prompt, onEdit, onDelete, onPaste, categoryName }) => {
-  // Chrome拡張機能のサイドパネルに最適化された超コンパクトなデザイン
+  const { t } = useTranslation();
+  
+  // 日付をフォーマットする関数
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('ja-JP', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
   return (
     <div 
-      className="py-4 px-3 bg-white rounded-lg border border-transparent hover:border-blue-400 transition-colors duration-150 group cursor-pointer"
+      className="relative p-4 group"
       onClick={() => onPaste(prompt.prompt)}
-      title="クリックして貼り付け"
+      title={t('click_to_paste')}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex-grow min-w-0 pr-2">
-          {/* タイトル - より見やすいサイズとウェイトに */}
-          <h3 className="text-base font-semibold text-slate-800 truncate" title={prompt.title}>
-            {prompt.title}
-          </h3>
+      <div className="relative z-10">
+        <div className="flex items-start justify-between">
+          <div className="flex-grow min-w-0 pr-3">
+            {/* タイトル */}
+            <h3 
+              className="text-base font-semibold text-slate-800 dark:text-slate-100 truncate mb-1.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" 
+              title={prompt.title}
+            >
+              {prompt.title}
+            </h3>
 
-          {/* カテゴリバッジ（カテゴリがある場合のみ表示） */}
-          {categoryName && (
-            <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium rounded px-2 py-0.5 mt-1 mb-1 mr-2">
-              {categoryName}
-            </span>
-          )}
+            {/* カテゴリバッジ */}
+            {categoryName && (
+              <span className="inline-block bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 text-xs font-medium rounded-full px-2.5 py-1 mb-2 mr-2 border border-blue-100 dark:border-blue-900/50">
+                {categoryName}
+              </span>
+            )}
+            
+            {/* 本文プレビュー */}
+            <p 
+              className="text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 break-words" 
+              title={prompt.prompt}
+            >
+              {prompt.prompt}
+            </p>
+            
+            {/* 日付 */}
+            <div className="flex items-center mt-3 text-xs text-slate-400 dark:text-slate-500">
+              <FiClock className="w-3.5 h-3.5 mr-1" />
+              <span>{formatDate(prompt.createdAt)}</span>
+            </div>
+          </div>
           
-          {/* 本文プレビュー - サイズアップして余白追加 */}
-          <p className="text-sm text-slate-600 mt-1 truncate" title={prompt.prompt}>
-            {prompt.prompt}
-          </p>
-          
-          {/* 日付もよりコンパクトに */}
-          <span className="text-[10px] text-slate-400 inline-block mt-2">
-            {new Date(prompt.createdAt).toLocaleDateString()}
-          </span>
-        </div>
-        
-        {/* アクションボタンを常時表示に変更
-            - なぜ: ユーザビリティ向上のため、常時編集・削除ボタンが見えるようにする（操作方法の迷いを防ぐ）
-        */}
-        <div className="flex items-center space-x-2">
-          {/* 貼り付けボタン */}
-          <button
-            type="button"
-            aria-label="貼り付け"
-            className="bg-white text-slate-500 hover:text-green-500 p-2 rounded transition-all flex items-center justify-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              onPaste(prompt.prompt);
-            }}
-            title="貼り付け"
-          >
-            <FaPaperPlane size={14} />
-          </button>
-          
-          {/* 編集ボタン: 常に表示 */}
-          <button
-            type="button"
-            aria-label="編集"
-            className="bg-white text-slate-500 hover:text-blue-500 p-2 rounded transition-all flex items-center justify-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(prompt.id);
-            }}
-            title="編集"
-          >
-            <FaEdit size={14} />
-          </button>
+          {/* アクションボタン */}
+          <div className="flex items-center space-x-1.5">
+            {/* 貼り付けボタン */}
+            <button
+              type="button"
+              aria-label={t('paste')}
+              className="p-1.5 text-slate-400 hover:text-green-500 dark:hover:text-green-400 rounded-lg transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onPaste(prompt.prompt);
+              }}
+              title={t('paste')}
+            >
+              <FiSend size={16} />
+            </button>
+            
+            {/* 編集ボタン */}
+            <button
+              type="button"
+              aria-label={t('edit')}
+              className="p-1.5 text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 rounded-lg transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(String(prompt.id)); // 明示的に文字列に変換
+              }}
+              title={t('edit')}
+            >
+              <FiEdit2 size={16} />
+            </button>
 
-          {/* 削除ボタン: 常に表示 */}
-          <button
-            type="button"
-            aria-label="削除"
-            className="bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 p-2 rounded transition-all flex items-center justify-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(prompt.id);
-            }}
-            title="削除"
-          >
-            <FaTrash size={14} />
-          </button>
+            {/* 削除ボタン */}
+            <button
+              type="button"
+              aria-label={t('delete')}
+              className="p-1.5 text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg transition-all duration-200 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(String(prompt.id)); // 明示的に文字列に変換
+              }}
+              title={t('delete')}
+            >
+              <FiTrash2 size={16} />
+            </button>
+          </div>
         </div>
       </div>
     </div>
