@@ -4,7 +4,11 @@
   "edit_prompt": "Edit Prompt",
   "prompt_title": "Title",
   "prompt_body": "Prompt Body",
+<<<<<<< HEAD
   "import_from_file": "Import from file",
+=======
+  "import_from_file": "Import from File",
+>>>>>>> feature/ai-document
   "file_selected_none": "No file selected",
   "cancel": "Cancel",
   "save": "Save",
@@ -16,7 +20,11 @@
   "error_import": "Failed to import prompt.",
   "error_save": "Failed to save prompt.",
   "error_delete": "Failed to delete prompt.",
+<<<<<<< HEAD
   "validation_required": "Title and body are required.",
+=======
+  "validation_required": "Title and prompt body are required",
+>>>>>>> feature/ai-document
   "error_load": "Failed to load prompts.",
   "confirm_delete": "Are you sure you want to delete?",
   "error_no_active_tab": "No active tab found.",
@@ -29,5 +37,39 @@
   "empty_list": "No prompts available",
   "create_from_header": "Create from the '+' button in the header",
   "prompt_count": "{{count}} prompts",
+<<<<<<< HEAD
   "back_to_top": "Back to top"
+=======
+  "back_to_top": "Back to top",
+  "delete": "Delete",
+  "search": "Search",
+  "category": "Category",
+  "no_category": "No Category",
+  "add_category": "Add Category",
+  "edit_category": "Edit Category",
+  "delete_category": "Delete Category",
+  "category_name": "Category Name",
+  "all_categories": "All Categories",
+  "categoryManager": {
+    "title": "Category Management",
+    "placeholder": "New category name",
+    "error": {
+      "emptyName": "Please enter a category name",
+      "duplicateName": "A category with this name already exists"
+    }
+  },
+  "common": {
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "update": "Update"
+  },
+  "prompt_title_placeholder": "Enter title",
+  "prompt_body_placeholder": "Enter prompt",
+  "choose_file": "Choose file",
+  "drag_drop_or_click": "Drag & drop a file or click to select"
+>>>>>>> feature/ai-document
 }
