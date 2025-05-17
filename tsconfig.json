@@ -1,4 +1,6 @@
 {
+  // WXTの生成した設定ファイルを継承
+  "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -10,12 +12,19 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    // moduleResolutionは.wxt/tsconfig.jsonから継承されるので不要
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "entrypoints/**/*.ts",
+    "entrypoints/**/*.tsx",
+    "wxt.config.ts",
+    ".wxt/types/paths.d.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
