@@ -38,5 +38,20 @@
   "edit_category": "Edit Category",
   "delete_category": "Delete Category",
   "category_name": "Category Name",
-  "all_categories": "All Categories"
+  "all_categories": "All Categories",
+  "categoryManager": {
+    "title": "Category Management",
+    "placeholder": "New category name",
+    "error": {
+      "emptyName": "Please enter a category name",
+      "duplicateName": "A category with this name already exists"
+    }
+  },
+  "common": {
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  }
 }

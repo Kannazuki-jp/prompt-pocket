@@ -38,5 +38,20 @@
   "edit_category": "カテゴリを編集",
   "delete_category": "カテゴリを削除",
   "category_name": "カテゴリ名",
-  "all_categories": "すべてのカテゴリ"
+  "all_categories": "すべてのカテゴリ",
+  "categoryManager": {
+    "title": "カテゴリ管理",
+    "placeholder": "新しいカテゴリ名",
+    "error": {
+      "emptyName": "カテゴリ名を入力してください",
+      "duplicateName": "同じ名前のカテゴリが既に存在します"
+    }
+  },
+  "common": {
+    "add": "追加",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "edit": "編集",
+    "delete": "削除"
+  }
 }
