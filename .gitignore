@@ -11,8 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-.output
-.wxt
+.output/
+.wxt/
 
 # Editor directories and files
 .vscode/*

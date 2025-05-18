@@ -6,7 +6,7 @@ import { filterPrompts } from './utils/promptUtils';
 import { NOTIFICATION_TIMEOUT_MS } from '../core/constants/app';
 import { PasteMessage, PasteResponse } from '../core/types/messaging';
 import { useTranslation } from 'react-i18next';
-import { extractVariables, hasVariables, replaceVariables } from './utils/templateUtils';
+import { extractVariables, hasVariables, replaceVariables, hasUnreplacedVariables } from './utils/templateUtils';
 
 export interface UsePromptManagementReturn {
   prompts: Prompt[];
@@ -176,18 +176,34 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
     reader.readAsText(selectedFile);
   };
 
-  // 変数モーダルを閉じる処理
-  const handleVariableModalClose = () => {
+  /**
+   * 変数モーダルを閉じる処理
+   * モーダル関連の状態を初期化する
+   */
+  const handleVariableModalClose = useCallback(() => {
     setVariableModalOpen(false);
     setCurrentPromptText('');
     setPromptVariables([]);
-  };
+  }, []);
 
-  // 変数置換後のプロンプトを貼り付ける処理
-  const handleVariableSubmit = async (values: Record<string, string>) => {
+  /**
+   * 変数置換後のプロンプトを貼り付ける処理
+   * @param values 変数名と値のマップ
+   */
+  const handleVariableSubmit = useCallback(async (values: Record<string, string>) => {
     try {
+      // 入力値のバリデーション
+      if (!values || typeof values !== 'object') {
+        throw new Error(t('validation_required_all_variables'));
+      }
+      
       // 変数を置換したテキストを生成
       const replacedText = replaceVariables(currentPromptText, values);
+      
+      // 未置換の変数が残っていないか確認
+      if (hasUnreplacedVariables(replacedText)) {
+        console.warn('未置換の変数が残っています:', extractVariables(replacedText));
+      }
       
       // 置換したテキストを貼り付け
       await pasteTextToActiveTab(replacedText);
@@ -201,11 +217,18 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
         type: NotificationType.ERROR 
       });
     }
-  };
+  }, [currentPromptText, t, handleVariableModalClose]);
 
-  // アクティブなタブにテキストを貼り付ける共通関数
-  const pasteTextToActiveTab = async (text: string) => {
+  /**
+   * アクティブなタブにテキストを貼り付ける共通関数
+   * @param text 貼り付けるテキスト
+   */
+  const pasteTextToActiveTab = useCallback(async (text: string) => {
     try {
+      if (!text) {
+        throw new Error(t('error_paste'));
+      }
+      
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       if (tabs.length === 0) {
         throw new Error(t('error_no_active_tab'));
@@ -234,42 +257,40 @@ export const usePromptManagement = (): UsePromptManagementReturn => {
       setNotification({ message: displayMessage, type: NotificationType.ERROR });
       throw error; // エラーを再スローして呼び出し元でもキャッチできるようにする
     }
-  };
+  }, [t]);
 
-  // プロンプトの貼り付け処理
+  /**
+   * プロンプトの貼り付け処理
+   * @param text 貼り付けるテキスト
+   */
   const handlePastePrompt = useCallback(async (text: string) => {
     try {
-      // デバッグ用ログ
-      console.log('貼り付けるテキスト:', text);
+      if (!text) {
+        setNotification({ message: t('error_paste'), type: NotificationType.ERROR });
+        return;
+      }
       
       // プロンプトに変数が含まれているかチェック
-      const containsVariables = hasVariables(text);
-      console.log('変数を含んでいるか:', containsVariables);
-      
-      if (containsVariables) {
+      if (hasVariables(text)) {
         // 変数を抽出
         const variables = extractVariables(text);
-        console.log('検出された変数:', variables);
         
         if (variables.length > 0) {
-          console.log('変数モーダルを表示します');
           // 変数置換モーダルを表示するための状態をセット
           setCurrentPromptText(text);
           setPromptVariables(variables);
           setVariableModalOpen(true);
-          console.log('variableModalOpen:', true);
           return; // 変数モーダルで処理するのでここで終了
         }
       }
       
-      console.log('変数なし、直接貼り付けます');
       // 変数がない場合は直接貼り付け
       await pasteTextToActiveTab(text);
     } catch (error: any) {
       console.error('Error in paste prompt:', error);
       // エラー処理はpasteTextToActiveTab内で行われるため、ここでは何もしない
     }
-  }, [t]);
+  }, [t, pasteTextToActiveTab]);
 
   useEffect(() => {
     if (notification.message) {

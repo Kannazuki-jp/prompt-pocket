@@ -8,12 +8,12 @@
           "app.ts": {
             "type": "file",
             "size": 45,
-            "mtime": "2025-05-17T15:34:35.620Z"
+            "mtime": "2025-05-17T19:13:28.369Z"
           },
           "selectors.ts": {
             "type": "file",
             "size": 429,
-            "mtime": "2025-05-17T15:39:12.710Z"
+            "mtime": "2025-05-17T19:13:28.369Z"
           }
         }
       },
@@ -22,18 +22,18 @@
         "children": {
           "index.ts": {
             "type": "file",
-            "size": 1035,
-            "mtime": "2025-05-17T05:27:05.849Z"
+            "size": 1065,
+            "mtime": "2025-05-17T19:13:28.370Z"
           },
           "messaging.ts": {
             "type": "file",
-            "size": 790,
-            "mtime": "2025-05-17T15:15:50.069Z"
+            "size": 819,
+            "mtime": "2025-05-17T19:13:28.370Z"
           },
           "ui.ts": {
             "type": "file",
-            "size": 227,
-            "mtime": "2025-05-14T19:47:19.626Z"
+            "size": 233,
+            "mtime": "2025-05-17T19:13:28.370Z"
           }
         }
       }
@@ -47,8 +47,8 @@
         "children": {
           "contentScript.ts": {
             "type": "file",
-            "size": 2254,
-            "mtime": "2025-05-17T16:37:06.283Z"
+            "size": 2307,
+            "mtime": "2025-05-17T19:13:28.371Z"
           }
         }
       },
@@ -57,8 +57,8 @@
         "children": {
           "promptService.ts": {
             "type": "file",
-            "size": 4821,
-            "mtime": "2025-05-17T15:54:03.278Z"
+            "size": 4961,
+            "mtime": "2025-05-17T19:13:28.372Z"
           }
         }
       },
@@ -71,19 +71,19 @@
               "CategoryManager.tsx": {
                 "type": "file",
                 "size": 7362,
-                "mtime": "2025-05-17T15:45:27.825Z"
+                "mtime": "2025-05-17T19:13:28.373Z"
               },
               "SidePanel.tsx": {
                 "type": "file",
                 "size": 7439,
-                "mtime": "2025-05-17T15:44:49.579Z"
+                "mtime": "2025-05-17T19:13:28.373Z"
               }
             }
           },
           "sidepanelScript.tsx": {
             "type": "file",
             "size": 819,
-            "mtime": "2025-05-17T15:55:49.820Z"
+            "mtime": "2025-05-17T19:13:28.374Z"
           }
         }
       }
@@ -92,25 +92,20 @@
   "i18n.ts": {
     "type": "file",
     "size": 441,
-    "mtime": "2025-05-16T15:48:29.328Z"
-  },
-  "index.css": {
-    "type": "file",
-    "size": 362,
-    "mtime": "2025-05-17T14:19:07.500Z"
+    "mtime": "2025-05-17T19:13:28.374Z"
   },
   "locales": {
     "type": "directory",
     "children": {
       "en.json": {
         "type": "file",
-        "size": 2259,
-        "mtime": "2025-05-17T05:32:48.860Z"
+        "size": 2321,
+        "mtime": "2025-05-17T19:13:28.375Z"
       },
       "ja.json": {
         "type": "file",
-        "size": 2900,
-        "mtime": "2025-05-17T05:32:41.359Z"
+        "size": 2962,
+        "mtime": "2025-05-17T19:13:28.375Z"
       }
     }
   },
@@ -119,18 +114,13 @@
     "children": {
       "CategoryManager.tsx": {
         "type": "file",
-        "size": 7183,
-        "mtime": "2025-05-17T16:36:13.055Z"
-      },
-      "Popup.css": {
-        "type": "file",
-        "size": 648,
-        "mtime": "2025-05-16T13:45:22.271Z"
+        "size": 7350,
+        "mtime": "2025-05-17T19:13:28.375Z"
       },
       "SidePanel.tsx": {
         "type": "file",
-        "size": 7222,
-        "mtime": "2025-05-17T06:01:32.929Z"
+        "size": 7467,
+        "mtime": "2025-05-17T20:51:21.437Z"
       }
     }
   },
@@ -142,40 +132,40 @@
         "children": {
           "CategorySidebar.tsx": {
             "type": "file",
-            "size": 4262,
-            "mtime": "2025-05-16T17:39:45.570Z"
+            "size": 4394,
+            "mtime": "2025-05-17T19:13:28.376Z"
           },
           "Notification.tsx": {
             "type": "file",
-            "size": 1397,
-            "mtime": "2025-05-14T17:25:39.054Z"
+            "size": 1425,
+            "mtime": "2025-05-17T19:13:28.376Z"
           },
           "PromptItem.tsx": {
             "type": "file",
-            "size": 4868,
-            "mtime": "2025-05-17T06:09:16.450Z"
+            "size": 4989,
+            "mtime": "2025-05-17T19:13:28.377Z"
           },
           "PromptList.tsx": {
             "type": "file",
-            "size": 4797,
-            "mtime": "2025-05-17T15:35:34.080Z"
+            "size": 4898,
+            "mtime": "2025-05-17T19:13:28.377Z"
           },
           "PromptModal.tsx": {
             "type": "file",
             "size": 10909,
-            "mtime": "2025-05-17T15:35:44.952Z"
+            "mtime": "2025-05-17T19:13:28.377Z"
           },
           "SearchBar.tsx": {
             "type": "file",
-            "size": 1259,
-            "mtime": "2025-05-16T13:46:53.440Z"
+            "size": 1292,
+            "mtime": "2025-05-17T19:13:28.378Z"
           }
         }
       },
       "usePromptManagement.ts": {
         "type": "file",
-        "size": 8413,
-        "mtime": "2025-05-17T15:51:27.967Z"
+        "size": 8652,
+        "mtime": "2025-05-17T19:13:28.378Z"
       },
       "utils": {
         "type": "directory",
@@ -183,12 +173,12 @@
           "promptUtils.ts": {
             "type": "file",
             "size": 864,
-            "mtime": "2025-05-17T15:50:51.151Z"
+            "mtime": "2025-05-17T19:13:28.379Z"
           },
           "storage.ts": {
             "type": "file",
             "size": 3301,
-            "mtime": "2025-05-17T15:52:16.862Z"
+            "mtime": "2025-05-17T19:13:28.380Z"
           }
         }
       }
@@ -196,8 +186,8 @@
   },
   "styles.css": {
     "type": "file",
-    "size": 612,
-    "mtime": "2025-05-17T14:40:01.949Z"
+    "size": 624,
+    "mtime": "2025-05-17T19:50:14.028Z"
   },
   "utils": {
     "type": "directory",
@@ -205,7 +195,7 @@
       "dom.ts": {
         "type": "file",
         "size": 1327,
-        "mtime": "2025-05-17T15:16:06.827Z"
+        "mtime": "2025-05-17T19:13:28.380Z"
       }
     }
   }

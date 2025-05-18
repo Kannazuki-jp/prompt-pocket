@@ -1,6 +1,6 @@
 # プロジェクト構造レポート
 
-生成日時: 2025-05-17T17:49:54.204Z
+生成日時: 2025-05-17T21:05:10.207Z
 
 ## プロジェクト概要
 
@@ -16,41 +16,39 @@
 │   │   ├── app.ts (45 B)
 │   │   └── selectors.ts (429 B)
 │   └── types/
-│       ├── index.ts (1.01 KB)
-│       ├── messaging.ts (790 B)
-│       └── ui.ts (227 B)
+│       ├── index.ts (1.04 KB)
+│       ├── messaging.ts (819 B)
+│       └── ui.ts (233 B)
 ├── features/
 │   ├── content/
-│   │   └── contentScript.ts (2.2 KB)
+│   │   └── contentScript.ts (2.25 KB)
 │   ├── prompt/
-│   │   └── promptService.ts (4.71 KB)
+│   │   └── promptService.ts (4.84 KB)
 │   └── sidepanel/
 │       ├── pages/
 │       │   ├── CategoryManager.tsx (7.19 KB)
 │       │   └── SidePanel.tsx (7.26 KB)
 │       └── sidepanelScript.tsx (819 B)
 ├── i18n.ts (441 B)
-├── index.css (362 B)
 ├── locales/
-│   ├── en.json (2.21 KB)
-│   └── ja.json (2.83 KB)
+│   ├── en.json (2.27 KB)
+│   └── ja.json (2.89 KB)
 ├── pages/
-│   ├── CategoryManager.tsx (7.01 KB)
-│   ├── Popup.css (648 B)
-│   └── SidePanel.tsx (7.05 KB)
+│   ├── CategoryManager.tsx (7.18 KB)
+│   └── SidePanel.tsx (7.29 KB)
 ├── shared/
 │   ├── components/
-│   │   ├── CategorySidebar.tsx (4.16 KB)
-│   │   ├── Notification.tsx (1.36 KB)
-│   │   ├── PromptItem.tsx (4.75 KB)
-│   │   ├── PromptList.tsx (4.68 KB)
+│   │   ├── CategorySidebar.tsx (4.29 KB)
+│   │   ├── Notification.tsx (1.39 KB)
+│   │   ├── PromptItem.tsx (4.87 KB)
+│   │   ├── PromptList.tsx (4.78 KB)
 │   │   ├── PromptModal.tsx (10.65 KB)
-│   │   └── SearchBar.tsx (1.23 KB)
-│   ├── usePromptManagement.ts (8.22 KB)
+│   │   └── SearchBar.tsx (1.26 KB)
+│   ├── usePromptManagement.ts (8.45 KB)
 │   └── utils/
 │       ├── promptUtils.ts (864 B)
 │       └── storage.ts (3.22 KB)
-├── styles.css (612 B)
+├── styles.css (624 B)
 └── utils/
     └── dom.ts (1.3 KB)
 ```
@@ -121,12 +119,16 @@ graph TD;
     src/i18n.ts --> src/locales/ja.json
     src/pages/CategoryManager.tsx --> src/core/types/index.ts
     src/pages/CategoryManager.tsx --> src/features/prompt/promptService.ts
+    src/pages/SidePanel.tsx --> src/shared/components/Notification.tsx
+    src/pages/SidePanel.tsx --> src/shared/components/PromptList.tsx
+    src/pages/SidePanel.tsx --> src/shared/components/PromptModal.tsx
+    src/pages/SidePanel.tsx --> src/shared/usePromptManagement.ts
     src/pages/SidePanel.tsx --> src/pages/CategoryManager.tsx
 ```
 
 ## ファイル統計
 
-- 総ファイル数: 28 ファイル
+- 総ファイル数: 26 ファイル
 - 総ディレクトリ数: 14 ディレクトリ
-- 合計サイズ: 86.18 KB
+- 合計サイズ: 86.62 KB
 

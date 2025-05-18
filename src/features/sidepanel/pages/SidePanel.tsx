@@ -7,7 +7,7 @@ import { Notification } from '../../../shared/components/Notification';
 import { useTranslation } from 'react-i18next';
 import { FiPlus } from 'react-icons/fi';
 import ReactCountryFlag from 'react-country-flag';
-import CategoryManager from './CategoryManager';
+import CategoryManager from '../../../pages/CategoryManager';
 import { usePromptManagement } from '../../../shared/usePromptManagement';
 import { VariableModal } from '../../../shared/components/VariableModal';
 

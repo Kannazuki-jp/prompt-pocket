@@ -23,7 +23,6 @@
     "src/**/*.tsx",
     "entrypoints/**/*.ts",
     "entrypoints/**/*.tsx",
-    "wxt.config.ts",
     ".wxt/types/paths.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
